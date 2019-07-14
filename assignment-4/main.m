@@ -11,19 +11,19 @@ clear all;
 clear;
 clc;
 % 
-% [file, path] = uigetfile({'*.mp4'; '*.webm'});
-% video_path = fullfile(path, file);
-% readerObj = VideoReader(video_path, 'tag', 'myreader1');
-% vidFrames = read(readerObj);
-% numFrames = get(readerObj, 'NumberOfFrames');
-% figure;
-% for k = 1 : numFrames - 1
-%     frame = vidFrames(:,:,:,k);
-%     subplot(1,2,1); imshow(frame); title('Lets');
-%     hold on;
-%     subplot(1,2,2); imshow(frame); title('see');
-%     hold on;
-% end
+[file, path] = uigetfile({'*.mp4'; '*.webm'});
+video_path = fullfile(path, file);
+readerObj = VideoReader(video_path, 'tag', 'myreader1');
+vidFrames = read(readerObj);
+numFrames = get(readerObj, 'NumberOfFrames');
+figure;
+for k = 1 : numFrames - 1
+    frame = vidFrames(:,:,:,k);
+    subplot(1,2,1); imshow(frame); title('Lets');
+    hold on;
+    subplot(1,2,2); imshow(frame); title('see');
+    hold on;
+end
 
 N1=rand(121,20e3);
 X1=rand(1,121);

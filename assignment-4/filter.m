@@ -2,40 +2,28 @@ clear all;
 clear;
 clc;
 
-% original image = f(x,y)
-img = imread('img.jpg');
+%% original image = f(x,y)
+img = imread('sharpen.jpg');
+img = rgb2gray(img);
 
-% noisy image = g(x,y) after adding salt and pepper noise n(x,)
-nimg = imnoise(img, 'salt & pepper', 0.15);
+%% kernel image averaging
+avg_kernel = ones(9)/81.0;
 
-% output image after image averaging g'(x,y)
-output = zeros(size(img));
-nimg = double(nimg);
+%% kernel sharpen image
+sharpen_kernel = [0,-1, 0;
+                 -1, 5,-1;
+                  0,-1, 0];
+%% edge kernel
+edge_kernel = [-1,-1,-1;
+               -1, 8,-1;
+               -1,-1,-1];
 
-% kernel
-kernel = zeros(5);
-[rows, cols, channel] = size(img);
-
-for i = 2:rows-1
-    for j = 2:cols-1
-        for k = 1:channel
-        average = 0;
-            pixel = (nimg(i-1,j-1,k) + nimg(i-1,j,k) + ...
-               nimg(i-1,j+1,k) + nimg(i,j-1,k) + ...
-               nimg(i,j,k) + nimg(i,j+1,k) + ...
-               nimg(i+1,j-1,k) + nimg(i+1,j,k) + ...
-               nimg(i+1,j+1,k)) / 9;
-            average = average + pixel;
-            output(i,j,k) = average;
-        end
-    end
-end
-
-nimg = uint8(nimg);
-output = uint8(output);
+output_avg = convolve(img, avg_kernel);
+output_sharpen = convolve(img, sharpen_kernel);
+output_edge = convolve(img, edge_kernel);
 
 figure;
-subplot(2,2,1); imshow(img); title('Original Image f(x,y)');
-subplot(2,2,2); imshow(nimg); title('Noisy Image g(x,y)');
-subplot(2,2,3); imshow(output); title('Output Image');
-subplot(2,2,4); imshow(img); title('Original Image');
+subplot(2,2,1); imshow(img); title('Original');
+subplot(2,2,2); imshow(output_avg); title('Image Average');
+subplot(2,2,3); imshow(output_sharpen); title('Image Sharpen');
+subplot(2,2,4); imshow(output_edge); title('Image Edge');
